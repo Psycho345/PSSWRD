@@ -5,7 +5,7 @@ class PSSWRD
 	private $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+";
 
 	public function generateSecret($length = 32) {
-		$str = '';
+		$str = "";
 		for($i = 0; $i < $length; $i++) 
 			$str .= $this->chars[rand(0, $length - 1)];
 		return $str;
@@ -18,7 +18,7 @@ class PSSWRD
 		}
 		$num =  sprintf("%0.0f", hexdec($hash));
 		$charsNum = (string)strlen($this->chars);
-		$str = '';
+		$str = "";
 		for ($i = 0; $i < $length; $i++) {
 			$idx = (int)bcmod($num, $charsNum);
 			$num = bcdiv($num, $charsNum);
