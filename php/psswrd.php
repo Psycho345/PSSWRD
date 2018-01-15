@@ -7,7 +7,7 @@ class PSSWRD
 	public function generateSecret($length = 32) {
 		$str = '';
 		for($i = 0; $i < $length; $i++) 
-			$str .= $this->chars[rand(0, $size - 1)];
+			$str .= $this->chars[rand(0, $length - 1)];
 		return $str;
 	}
 
