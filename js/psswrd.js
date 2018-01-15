@@ -17,7 +17,7 @@ class PSSWRD
 		length = length || 18;
 		iterations = iterations || 10000;
 		let hash = service + password + secret + realm;
-		for (let i = 0; i < 2500; i++) {
+		for (let i = 0; i < iterations; i++) {
 			hash = sha512(hash);
 		}
 		let num = new BigNumber(this.hexToDec(hash));
