@@ -1,29 +1,43 @@
 class PSSWRD 
 {
 	constructor() {
-		this.chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+";
+		this.chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+';
 	}
 	
 	generateSecret(length) {
 		length = length || 32;
-		let str;
+		let str = '';
 		for(let i = 0; i < length; i++) 
 			str += this.chars[Math.floor(Math.random() * length)];
 		return str;
 	}
 
-	generatePassword(service, password, secret, realm, length, iterations) {
-		realm = realm || "";
-		length = length || 18;
-		iterations = iterations || 10000;
-		let hash = service + password + secret + realm;
-		for (let i = 0; i < iterations; i++) {
+	generatePassword(service, password, secret, realm, realm2, maxLength, iterations) {
+		realm = realm || '';
+		realm2 = realm2 || '';
+		maxLength = maxLength || 18;
+		iterations = iterations || 2500;
+		let hash = password + secret;
+		for (let i = 0; i < iterations; i++)
 			hash = sha512(hash);
-		}
+		hash = service + this.hashToChars(hash);
+		for (let i = 0; i < iterations; i++)
+			hash = sha512(hash);
+		hash = this.hashToChars(hash) + realm;
+		for (let i = 0; i < iterations; i++)
+			hash = sha512(hash);
+		hash = this.hashToChars(hash) + realm2;
+		for (let i = 0; i < iterations; i++)
+			hash = sha512(hash);
+		return this.hashToChars(hash, maxLength);
+	}
+
+	hashToChars(hash, maxLength) {
+		maxLength = maxLength || 0;
 		let num = new BigNumber(this.hexToDec(hash));
 		let charsNum = this.chars.length;
-		let str = "";
-		for (let i = 0; i < length; i++) {
+		let str = '';
+		while (!num.isZero() && (maxLength <= 0 || str.length < maxLength)) {
 			let idx = parseInt(num.modulo(charsNum));
 			num = num.dividedToIntegerBy(charsNum);
 			str = this.chars[idx] + str;
